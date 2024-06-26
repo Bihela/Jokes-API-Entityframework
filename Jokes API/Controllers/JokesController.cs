@@ -1,8 +1,8 @@
-﻿using JokeAPIProject.Models;
-using JokeAPIProject.Services;
+﻿using Jokes_API.Models;
+using Jokes_API.Services;
 using Jokes_API.Models;
+using Jokes_API.Services;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -13,12 +13,10 @@ namespace JokeAPIProject.Controllers
 	public class JokesController : ControllerBase
 	{
 		private readonly JokeService _jokeService;
-		private readonly JokeContext _context;
 
-		public JokesController(JokeService jokeService, JokeContext context)
+		public JokesController(JokeService jokeService)
 		{
 			_jokeService = jokeService;
-			_context = context;
 		}
 
 		[HttpGet("random")]
@@ -36,7 +34,7 @@ namespace JokeAPIProject.Controllers
 		[HttpGet("{id}")]
 		public async Task<ActionResult<Joke>> GetJokeById(int id)
 		{
-			var joke = await _context.Jokes.FindAsync(id);
+			var joke = await _jokeService.GetJokeByIdAsync(id);
 			if (joke == null)
 			{
 				return NotFound();

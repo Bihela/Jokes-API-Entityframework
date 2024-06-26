@@ -1,7 +1,7 @@
 ﻿using Jokes_API.Models;
 using Microsoft.EntityFrameworkCore;
 
-namespace JokeAPIProject.Models
+namespace JokeAPIProject.Data
 {
 	public class JokeContext : DbContext
 	{
@@ -11,5 +11,12 @@ namespace JokeAPIProject.Models
 		}
 
 		public DbSet<Joke> Jokes { get; set; }
+
+		protected override void OnModelCreating(ModelBuilder modelBuilder)
+		{
+			modelBuilder.Entity<Joke>()
+				.Property(j => j.Id)
+				.ValueGeneratedNever();
+		}
 	}
 }
