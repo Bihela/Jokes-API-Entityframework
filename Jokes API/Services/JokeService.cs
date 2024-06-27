@@ -79,5 +79,24 @@ namespace Jokes_API.Services
 
 			return jokes;
 		}
+
+		public async Task<bool> SubmitJokeFeedbackAsync(int jokeId, int feedbackScore)
+		{
+			if (feedbackScore < 1 || feedbackScore > 5)
+			{
+				throw new ArgumentOutOfRangeException(nameof(feedbackScore), "Feedback score must be between 1 and 5.");
+			}
+
+			var feedback = new Feedback
+			{
+				JokeId = jokeId,
+				Score = feedbackScore
+			};
+
+			_context.Feedbacks.Add(feedback);
+			await _context.SaveChangesAsync();
+
+			return true; 
+		}
 	}
 }

@@ -1,10 +1,12 @@
+using System.Text;
 using JokeAPIProject.Data;
 using Jokes_API.Services;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
 builder.Services.AddControllers();
 builder.Services.AddHttpClient<JokeService>();
 builder.Services.AddDbContext<JokeContext>(options =>
@@ -12,7 +14,7 @@ builder.Services.AddDbContext<JokeContext>(options =>
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
+
 app.UseHttpsRedirection();
 app.UseAuthorization();
 app.MapControllers();

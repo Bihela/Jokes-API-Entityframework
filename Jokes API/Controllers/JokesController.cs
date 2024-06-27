@@ -1,7 +1,5 @@
 ﻿using Jokes_API.Models;
 using Jokes_API.Services;
-using Jokes_API.Models;
-using Jokes_API.Services;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -53,5 +51,37 @@ namespace JokeAPIProject.Controllers
 		{
 			return await _jokeService.GetTenJokesByTypeAsync(type);
 		}
+
+		[HttpPost("feedback")]
+		public async Task<IActionResult> SubmitFeedback([FromBody] FeedbackRequest request)
+		{
+			try
+			{
+				var success = await _jokeService.SubmitJokeFeedbackAsync(request.JokeId, request.FeedbackScore);
+				if (success)
+				{
+					return Ok();
+				}
+				else
+				{
+					return StatusCode(500, "Failed to submit feedback.");
+				}
+			}
+			catch (ArgumentOutOfRangeException ex)
+			{
+				return BadRequest(ex.Message);
+			}
+			catch (Exception)
+			{
+				return StatusCode(500, "An unexpected error occurred while submitting feedback.");
+			}
+		}
+
+		public class FeedbackRequest
+		{
+			public int JokeId { get; set; }
+			public int FeedbackScore { get; set; }
+		}
 	}
 }
+

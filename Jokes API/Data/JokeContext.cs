@@ -1,5 +1,5 @@
-﻿using Jokes_API.Models;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
+using Jokes_API.Models;
 
 namespace JokeAPIProject.Data
 {
@@ -11,12 +11,18 @@ namespace JokeAPIProject.Data
 		}
 
 		public DbSet<Joke> Jokes { get; set; }
+		public DbSet<Feedback> Feedbacks { get; set; }
 
 		protected override void OnModelCreating(ModelBuilder modelBuilder)
 		{
 			modelBuilder.Entity<Joke>()
+				.ToTable("Joke")
 				.Property(j => j.Id)
 				.ValueGeneratedNever();
+
+			modelBuilder.Entity<Feedback>()
+				.ToTable("Feedback")
+				.HasKey(f => f.Id);
 		}
 	}
 }
