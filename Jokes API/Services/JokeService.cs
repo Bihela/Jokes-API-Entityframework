@@ -14,6 +14,9 @@ namespace Jokes_API.Services
 		private readonly JokeContext _context;
 		private readonly JokeApiSettings _jokeApiSettings;
 
+		public HttpClient HttpClient { get; }
+		public JokeContext Context { get; }
+
 		public JokeService(HttpClient httpClient, JokeContext context, IOptions<JokeApiSettings> jokeApiSettings)
 		{
 			_httpClient = httpClient;
