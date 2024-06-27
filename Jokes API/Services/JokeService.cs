@@ -1,5 +1,6 @@
 ﻿using JokeAPIProject.Data;
 using Jokes_API.Models;
+using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 using System.Collections.Generic;
 using System.Net.Http;
@@ -11,16 +12,18 @@ namespace Jokes_API.Services
 	{
 		private readonly HttpClient _httpClient;
 		private readonly JokeContext _context;
+		private readonly JokeApiSettings _jokeApiSettings;
 
-		public JokeService(HttpClient httpClient, JokeContext context)
+		public JokeService(HttpClient httpClient, JokeContext context, IOptions<JokeApiSettings> jokeApiSettings)
 		{
 			_httpClient = httpClient;
 			_context = context;
+			_jokeApiSettings = jokeApiSettings.Value;
 		}
 
 		public async Task<Joke> GetRandomJokeAsync()
 		{
-			var response = await _httpClient.GetStringAsync("https://official-joke-api.appspot.com/random_joke");
+			var response = await _httpClient.GetStringAsync($"{_jokeApiSettings.BaseUrl}/random_joke");
 			var joke = JsonConvert.DeserializeObject<Joke>(response);
 
 			_context.Jokes.Add(joke);
@@ -31,7 +34,7 @@ namespace Jokes_API.Services
 
 		public async Task<List<Joke>> GetTenRandomJokesAsync()
 		{
-			var response = await _httpClient.GetStringAsync("https://official-joke-api.appspot.com/random_ten");
+			var response = await _httpClient.GetStringAsync($"{_jokeApiSettings.BaseUrl}/random_ten");
 			var jokes = JsonConvert.DeserializeObject<List<Joke>>(response);
 
 			_context.Jokes.AddRange(jokes);
@@ -42,7 +45,7 @@ namespace Jokes_API.Services
 
 		public async Task<Joke> GetJokeByIdAsync(int id)
 		{
-			var response = await _httpClient.GetStringAsync($"https://official-joke-api.appspot.com/jokes/{id}");
+			var response = await _httpClient.GetStringAsync($"{_jokeApiSettings.BaseUrl}/jokes/{id}");
 			var joke = JsonConvert.DeserializeObject<Joke>(response);
 
 			if (joke != null)
@@ -60,7 +63,7 @@ namespace Jokes_API.Services
 
 		public async Task<Joke> GetRandomJokeByTypeAsync(string type)
 		{
-			var response = await _httpClient.GetStringAsync($"https://official-joke-api.appspot.com/jokes/{type}/random");
+			var response = await _httpClient.GetStringAsync($"{_jokeApiSettings.BaseUrl}/jokes/{type}/random");
 			var joke = JsonConvert.DeserializeObject<Joke>(response);
 
 			_context.Jokes.Add(joke);
@@ -71,7 +74,7 @@ namespace Jokes_API.Services
 
 		public async Task<List<Joke>> GetTenJokesByTypeAsync(string type)
 		{
-			var response = await _httpClient.GetStringAsync($"https://official-joke-api.appspot.com/jokes/{type}/ten");
+			var response = await _httpClient.GetStringAsync($"{_jokeApiSettings.BaseUrl}/jokes/{type}/ten");
 			var jokes = JsonConvert.DeserializeObject<List<Joke>>(response);
 
 			_context.Jokes.AddRange(jokes);
@@ -96,7 +99,7 @@ namespace Jokes_API.Services
 			_context.Feedbacks.Add(feedback);
 			await _context.SaveChangesAsync();
 
-			return true; 
+			return true;
 		}
 	}
 }
