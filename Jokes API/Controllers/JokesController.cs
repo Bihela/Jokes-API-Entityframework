@@ -1,5 +1,6 @@
 ﻿using Jokes_API.Models;
 using Jokes_API.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -8,6 +9,7 @@ namespace JokeAPIProject.Controllers
 {
 	[Route("api/[controller]")]
 	[ApiController]
+	[Authorize]
 	public class JokesController : ControllerBase
 	{
 		private readonly JokeService _jokeService;

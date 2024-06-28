@@ -1,4 +1,4 @@
-﻿using JokeAPIProject.Data;
+using JokeAPIProject.Data;
 using Jokes_API.Models;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
@@ -80,8 +80,6 @@ namespace Jokes_API.Services
 
 			return joke;
 		}
-
-
 
 		public async Task<List<Joke>> GetTenJokesByTypeAsync(string type)
 		{
